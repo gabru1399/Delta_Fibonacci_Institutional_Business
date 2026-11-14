@@ -57,15 +57,18 @@ When a price pulls back below $EMA_{89}$ while $EMA_{89} > EMA_{233}$ (as occurr
 * $EMA_{233} = \$10.777$
 Because $EMA_{89} > EMA_{233}$, the regime was strictly **BULLISH**. Shorting into the rising 233 EMA resulted in a brutal bear squeeze where price reversed from \$10.78 up to \$13.80 (+28%). The Macro Regime Gate completely eliminates these traps.
 
-### 2.3 Entry Triggers
-* **Bullish Setup**:
-  1. Candle Low pierces into or touches $EMA_{89}$ (or enters the zone between 89 and 233).
-  2. Candle Close finishes above $EMA_{89}$ (showing buyer defense and absorption wick).
-  3. Entry is placed at the candle Close or on a limit retest of $EMA_{89}$.
-* **Bearish Setup**:
-  1. Candle High pierces into or touches $EMA_{89}$ (or enters the zone between 89 and 233).
-  2. Candle Close finishes below $EMA_{89}$ (showing seller absorption and rejection wick).
-  3. Entry is placed at the candle Close or on a limit retest of $EMA_{89}$.
+### 2.3 Tiered Entry Triggers & Single Entry Invariant
+The engine recognizes two distinct institutional rejection shelves while strictly enforcing the **Single Entry Invariant** (maximum 1 active trade per asset to prevent risk compounding during consecutive touch bars):
+
+* **Tier 1 (Equilibrium Pullback — EMA 89)**:
+  * Bullish: Candle Low pierces into or touches $EMA_{89}$, and candle Close finishes $\ge EMA_{89}$ with an absorption wick $\ge 25\%$.
+  * Bearish: Candle High pierces into or touches $EMA_{89}$, and candle Close finishes $\le EMA_{89}$ with an absorption wick $\ge 25\%$.
+* **Tier 2 (Deep Discount Institutional Sweep — EMA 233)**:
+  * Bullish: Candle Low pierces into or touches $EMA_{233}$, and candle Close finishes $\ge EMA_{233}$ (even if below $EMA_{89}$) with an absorption wick $\ge 25\%$, while the macro regime remains bullish ($EMA_{89} > EMA_{233}$).
+  * Bearish: Candle High pierces into or touches $EMA_{233}$, and candle Close finishes $\le EMA_{233}$ with an absorption wick $\ge 25\%$, while the macro regime remains bearish ($EMA_{89} < EMA_{233}$).
+* **Consecutive Wicks Handling**:
+  * Once a trade is triggered on Candle 1, subsequent touching candles (Candle 2, Candle 3 on the same swing) are managed strictly as intra-trade bars. No duplicate entry is permitted.
+  * If stopped out by a wick sweep, an immediate **Sweep Re-Entry** is executed if the exact sweep candle reclaims the EMA shelf.
 
 ### 2.4 Stop Loss & Institutional Volatility Buffer
 Retail stop losses placed exactly at candle extremes are routinely swept by market makers. Our institutional engine mandates a volatility buffer:

@@ -1,14 +1,13 @@
 # Delta Fibonacci Prime Alpha Fund (India)
-## Institutional Quantitative Business Plan & Full 250-Asset Calmar Audit
+## Institutional Quantitative Business Plan & Full 250-Asset Calmar Audit (v2.0)
 
 **Venture Entity**: Delta Fibonacci Institutional Business  
 **Operating Exchange Venue**: Delta Exchange India (`api.india.delta.exchange`) — FIU-IND Compliant  
-**Asset Universe Audited**: All 250 Perpetual Futures Contracts (Crypto + TradFi Synthetics)  
-**Total Simulations**: 9,315 Multi-Parameter Simulations  
+**Asset Universe Audited**: 250 Perpetual Futures Contracts across 5 Institutional Sectors  
+**Total Simulations**: 11,613 Multi-Parameter Backtests (Single-TF 4H, Single-TF 1H, and MTF 4H+1H Confluence)  
 **Target Capital Base**: $5,000 USD (Approx. ₹4,35,000 INR)  
-**Portfolio Concurrency Governor**: Max 6 Simultaneous Positions  
-**Portfolio Calmar Ratio**: **62.53** (Fixed Risk) to **177.18** (Compounding)  
-**Portfolio Win Rate**: **46.2%** (Profit Factor: 2.85 – 7.91)  
+**Execution Governance**: Single Entry Invariant (Strictly 1 Active Trade Per Symbol, Max 6 Simultaneous Basket Positions)  
+**Tiered Rejection Support**: Full Capture of $EMA_{89}$ (Equilibrium) and $EMA_{233}$ (Deep Discount Institutional Sweeps)  
 
 ---
 
@@ -18,43 +17,81 @@ Operating an algorithmic prop-trading business inside India faces severe frictio
 
 **Delta Exchange India provides a compliant, high-velocity alternative**:
 1. **Full Regulatory Compliance**: Registered directly with FIU-IND with local Indian banking rails (instant INR deposit & withdrawal via UPI, IMPS, and NEFT).
-2. **Unified Crypto & TradFi Perpetual Suite**: Allows trading crypto blue chips alongside synthetic global equities (**Nasdaq 100 QQQX**, **Micron MUB**, **Nvidia NVDAX**, **Meta METAX**, **ARM ARMB**, **Intel INTCB**) and commodities (**Gold PAXG/XAUT**, **Silver SLVON**, **Crude Oil OIL**).
-3. **Institutional Calmar Ratio (62.53 – 177.18)**: By filtering out counter-trend traps via the **$EMA_{89}/EMA_{233}$ Macro Regime Gate** and applying an **ATR buffer ($0.3 \times \text{ATR}$)** on structural stops, win rates average **46.2%** with maximum portfolio drawdowns held to an ultra-safe **2.8% to 5.6%**.
+2. **Unified 5-Sector Asset Universe**:
+   * **Commodities & Metals**: Gold (`PAXGUSD`, `XAUTUSD`), Silver (`SLVONUSD`), Crude Oil (`OILUSD`).
+   * **TradFi Equities & Synthetics**: `ARMBUSD` (ARM), `MRVLBUSD` (Marvell), `HOODBUSD` (Robinhood), `AMDBUSD` (AMD), `BILLUSD` (Bill.com), `INTCBUSD` (Intel), `TSLAXUSD` (Tesla), `NVDAXUSD` (Nvidia).
+   * **Indices & ETFs**: `EWYBUSD` (MSCI South Korea), `SOXLBUSD` (Semiconductor 3X Bull), `SPCXXUSD` (S&P 500), `QQQXUSD` (Nasdaq 100).
+   * **Crypto Blue-Chips**: `BTCUSD`, `ETHUSD`, `SOLUSD`, `DOGEUSD`, `AVAXUSD`, `SUIUSD`, `NEARUSD`.
+   * **Altcoins & DeFi Tokens**: `BANKUSD`, `GRAMUSD`, `TACUSD`, `INUSD`, `AXSUSD`.
+3. **Methodological Rigor**:
+   * **Tiered Support Engine**: Both $EMA_{89}$ and $EMA_{233}$ rejection wicks are captured.
+   * **Single Entry Invariant**: Eliminates duplicate position risk during multiple consecutive wicks on the same swing.
+   * **Multi-Timeframe (MTF) Confluence**: 4H Macro Regime Gate + 1H precision execution yields tighter stops and higher R-multiples ($3\text{R}-6\text{R}$).
 
 ---
 
-## 2. Top 20 Calmar Wealth Basket Scorecard
+## 2. Institutional Sector-Balanced Leaderboard (Top Performers by Sector)
 
-| Symbol | Sector | TF | Strategy Mode | Ribbon | Win Rate | Profit Factor | Net R | Max DD (R) | Annualized Net R | Calmar Ratio |
-| :--- | :--- | :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **RLCUSD** | Web3 Cloud | 1H | Trailing 55 | Fib 21/55 | 33.3% | 2.44 | +3.9 R | 0.72 R | +46.7 R | **65.28** |
-| **MRVLBUSD**| Marvell Tech (TradFi) | 1H | Trailing 55 | Fib 89/233 | **63.6%** | **7.91** | +18.1 R | 1.00 R | +59.9 R | **59.95** |
-| **MRNABUSD**| Moderna (TradFi) | 1H | Fixed 3.0R | Fib 21/55 | 41.7% | 2.03 | +7.5 R | 3.12 R | +106.3 R | **34.08** |
-| **BANKUSD** | Bank Token | 1H | Fixed 3.0R | Fib 89/233 | **56.5%** | **3.70** | +28.1 R | 3.12 R | +97.6 R | **31.29** |
-| **BTWUSD**  | Bitway | 1H | Fixed 2.5R | Fib 34/89 | **45.0%** | 1.94 | +10.7 R | 4.16 R | +114.8 R | **27.60** |
-| **SOONUSD** | Soon Perp | 1H | Trailing 55 | Classic 50/200 | 23.1% | 2.65 | +4.3 R | 1.64 R | +44.0 R | **26.92** |
-| **GRAMUSD** | Gram Token | 1H | Step Trail | Fib 21/55 | **57.1%** | **3.92** | +18.2 R | 2.08 R | +53.8 R | **25.87** |
-| **INUSD**   | Infinity | 1H | Step Trail | Classic 50/200 | **53.8%** | **4.50** | +21.8 R | 2.66 R | +65.6 R | **24.65** |
-| **CAPUSD**  | Cap Perp | 1H | Fixed 2.5R | Fib 89/233 | **46.2%** | 2.03 | +7.5 R | 4.16 R | +101.2 R | **24.32** |
-| **INTCBUSD**| Intel (TradFi) | 1H | Trailing 89 | Fib 34/89 | 33.3% | 2.95 | +17.1 R | 2.51 R | +53.4 R | **21.23** |
-| **SOXLBUSD**| Semicon 3X (TradFi) | 4H | Fixed 2.0R | Fib 21/55 | **58.8%** | **2.69** | +12.3 R | 2.08 R | +43.9 R | **21.11** |
-| **ARMBUSD** | ARM Holdings (TradFi)| 1H | Trailing 55 | Fib 21/55 | 36.0% | 2.66 | +13.2 R | 2.48 R | +42.2 R | **17.05** |
-| **BILLUSD** | Bill.com (TradFi) | 4H | Trailing 55 | Fib 21/55 | **64.3%** | **5.34** | +5.6 R | 0.77 R | +13.0 R | **16.88** |
-| **AXSUSD**  | Axie Gaming | 1H | Fixed 3.0R | Classic 50/200 | **50.0%** | 2.85 | +53.8 R | 4.16 R | +67.8 R | **16.30** |
-| **SNDKBUSD**| SanDisk (TradFi) | 4H | Fixed 3.0R | Fib 21/55 | 40.0% | 1.90 | +8.4 R | 2.08 R | +29.9 R | **14.39** |
-| **CHIPUSD** | Semiconductor | 4H | Trailing 55 | Fib 34/89 | 42.9% | **4.42** | +6.5 R | 1.02 R | +14.3 R | **14.07** |
-| **LABUSD**  | Biotech 3X (TradFi) | 4H | Fixed 3.0R | Fib 89/233 | 42.1% | 2.07 | +12.2 R | 2.08 R | +29.1 R | **13.99** |
-| **AMDBUSD** | AMD Stock (TradFi) | 1H | Trailing 55 | Classic 50/200 | 25.0% | 3.70 | +11.9 R | 2.76 R | +36.8 R | **13.32** |
-| **ENJUSD**  | Enjin | 1H | Fixed 3.0R | Classic 50/200 | **46.4%** | 2.47 | +22.9 R | 3.12 R | +41.3 R | **13.23** |
-| **ZORAUSD** | Zora Perp | 4H | Fixed 2.0R | Fib 89/233 | **59.5%** | 2.77 | +31.3 R | 2.20 R | +27.4 R | **12.47** |
+| Sector | Top Symbol | Model Type | Timeframe | Strategy | Ribbon | Win Rate | Profit Factor | Net R | Max DD (R) | **Calmar Ratio** |
+| :--- | :--- | :---: | :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Commodities & Metals** | **XAUTUSD** (Gold) | Single-TF | 4H | Fixed 3.0R | Fib 89/233 | **42.9%** | **2.13** | +14.16 R | 3.12 R | **9.71** |
+| **Commodities & Metals** | **PAXGUSD** (Gold) | Single-TF | 4H | Fixed 2.5R | Classic 50/200 | **43.8%** | **1.84** | +23.58 R | 5.20 R | **7.10** |
+| **Commodities & Metals** | **SLVONUSD** (Silver) | Single-TF | 4H | Fixed 2.0R | Classic 50/200 | **40.8%** | 1.30 | +9.04 R | 5.56 R | **2.63** |
+| **Indices & ETFs** | **EWYBUSD** (Korea ETF) | Single-TF | 4H | Step-Trail | Classic 50/200 | **54.2%** | **2.50** | +17.11 R | 5.20 R | **13.04** |
+| **Indices & ETFs** | **SOXLBUSD** (Semicon 3X)| Single-TF | 4H | Trail 89 | Fib 21/55 | **42.1%** | **2.11** | +11.02 R | 4.03 R | **9.74** |
+| **Indices & ETFs** | **SPCXXUSD** (S&P 500) | Single-TF | 4H | Fixed 3.0R | Fib 89/233 | **37.5%** | 1.71 | +7.36 R | 3.28 R | **7.41** |
+| **TradFi Equities** | **ARMBUSD** (ARM) | MTF Confluence | 4H + 1H | Step-Trail | Fib 34/89/233 | **42.9%** | **3.23** | **+55.66 R** | 5.32 R | **34.85** |
+| **TradFi Equities** | **MRVLBUSD** (Marvell) | MTF Confluence | 4H + 1H | Step-Trail | Fib 34/89/233 | **52.7%** | **2.48** | **+39.90 R** | 4.16 R | **31.94** |
+| **TradFi Equities** | **HOODBUSD** (Robinhood)| Single-TF | 4H | Step-Trail | Classic 50/200 | **56.0%** | **4.07** | +35.14 R | 6.36 R | **23.70** |
+| **TradFi Equities** | **AMDBUSD** (AMD) | Single-TF | 1H | Step-Trail | Fib 89/233 | **48.1%** | **2.44** | +41.91 R | 5.68 R | **23.02** |
+| **Crypto Blue-Chips** | **DOGEUSD** | Single-TF | 4H | Fixed 2.5R | Fib 34/89 | **34.7%** | 1.26 | +50.48 R | 13.60 R | **1.49** |
+| **Crypto Blue-Chips** | **AVAXUSD** | Single-TF | 4H | Fixed 3.0R | Classic 50/200 | **30.5%** | 1.25 | +38.48 R | 16.08 R | **0.96** |
+| **Crypto Blue-Chips** | **ETHUSD** | Single-TF | 4H | Trail 89 | Classic 50/200 | **29.7%** | 1.38 | +48.97 R | 19.62 R | **0.93** |
+| **Altcoins & DeFi** | **BANKUSD** | Single-TF | 4H | Trail 55 | Fib 34/89 | **45.5%** | **4.83** | +14.29 R | 1.53 R | **45.70** |
+| **Altcoins & DeFi** | **GRAMUSD** | Single-TF | 1H | Step-Trail | Fib 89/233 | **63.6%** | **4.29** | +41.07 R | 3.70 R | **33.75** |
+| **Altcoins & DeFi** | **TACUSD** | Single-TF | 4H | Fixed 3.0R | Classic 50/200 | **50.0%** | **2.85** | +13.44 R | 2.08 R | **24.80** |
 
 ---
 
-## 3. Financial Simulation ($5,000 Base Capital)
+## 3. Event-Driven Portfolio Simulation ($5,000 Base Capital)
 
-| Model | Risk per Trade | Trades | Win Rate | Final Capital | Net Profit | Total ROI | Max DD % | **Calmar Ratio** | Daily Revenue | **Monthly Income** |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Conservative** | Fixed $25 (0.5%) | 325 | **46.2%** | **$11,193.48** | +$6,193.48 | +123.9% | **2.8%** | **62.53** | $21.42 / day (₹1,863) | **$642.46 / mo** (₹55,894) |
-| **Balanced** | Fixed $50 (1.0%) | 325 | **46.2%** | **$17,386.96** | +$12,386.96 | +247.7% | **4.6%** | **82.96** | $42.83 / day (₹3,726) | **$1,284.92 / mo** (₹1,11,788) |
-| **Dynamic Scale**| Compounding 0.5% | 325 | **46.2%** | **$16,866.95** | +$11,866.95 | +237.3% | **5.6%** | **64.80** | $41.03 / day (₹3,570) | **$1,230.98 / mo** (₹1,07,095) |
-| **Aggressive Growth**| Compounding 1.0% | 325 | **46.2%** | **$54,474.99** | +$49,474.99 | +989.5% | **11.0%** | **177.18** | $171.07 / day (₹14,883) | **$5,132.11 / mo** (₹4,46,494) |
+With zero equity lookahead, strict event-queue chronological ordering, maximum 6 concurrent positions, and maximum 2 positions per sector:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                            $5,000 BASKET PERFORMANCE ACROSS SIZING TIERS                    │
+├──────────────────────────┬──────────────┬──────────────┬─────────────┬───────────┬──────────┤
+│ Model                    │ Risk / Trade │ Final Equity │ Total ROI % │ Max DD %  │ Calmar   │
+├──────────────────────────┼──────────────┼──────────────┼─────────────┼───────────┼──────────┤
+│ Conservative Fixed       │ 0.5% ($25)   │ $5,264.50    │ +5.3%       │ 1.8%      │ 1.32     │
+│ Institutional Standard   │ 1.0% ($50)   │ $5,529.00    │ +10.6%      │ 3.4%      │ 1.37     │
+│ Dynamic Compounding      │ 0.5% Dynamic │ $5,266.57    │ +5.3%       │ 1.8%      │ 1.34     │
+│ Aggressive Compounding   │ 1.0% Dynamic │ $5,536.84    │ +10.7%      │ 3.4%      │ 1.41     │
+└──────────────────────────┴──────────────┴──────────────┴─────────────┴───────────┴──────────┘
+```
+
+---
+
+## 4. Operational Instructions
+
+### 4.1 Run Live Market Scanner
+```bash
+# Scan across all 5 sectors on 4H
+python engine/delta_live_scanner.py --tf 4H --sector ALL
+
+# Scan only Metals & Commodities
+python engine/delta_live_scanner.py --tf 4H --sector COMMODITIES_METALS
+
+# Scan both 4H and 1H for TradFi Synthetics
+python engine/delta_live_scanner.py --tf ALL --sector TRADFI_EQUITIES
+```
+
+### 4.2 Run Portfolio Simulator
+```bash
+python engine/simulate_business_portfolio.py
+```
+
+### 4.3 Re-run Complete Audit
+```bash
+python engine/run_full_business_audit.py
+```
