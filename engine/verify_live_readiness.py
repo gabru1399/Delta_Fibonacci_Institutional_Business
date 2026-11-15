@@ -146,7 +146,14 @@ def test_liquid_universe_and_lot_sizer():
             assert sizing['status'] == 'APPROVED_1R', f"{sym} should be APPROVED_1R!"
             assert sizing['actual_risk_inr'] <= 55.0, f"{sym} risk should be <= ₹55!"
             assert sizing['margin_10x_inr'] <= 2500.0, f"{sym} margin should be <= ₹2,500!"
-    print("  Position Sizer Check: PASSED. All approved trades risk ~₹50 with 10X margin < ₹350.")
+    # QR-2026-1115 fix: regression test for the removed APPROVED_FLEX band.
+    # SOLUSD 1 contract with a 2% stop at $69 risks ~Rs 117 (2.3R) and MUST reject.
+    sol = calculate_delta_order_sizing("SOLUSD", 69.0, 69.0 * 0.98, equity_inr=5000.0,
+                                       risk_pct=0.01, leverage=10.0, products_dict=prods)
+    assert sol['status'] == 'REJECTED_OVERSIZED', \
+        f"Strict 1.1R cap regression: SOLUSD must reject, got {sol['status']}"
+    print(f"  Strict Cap Check: SOLUSD 1-ct @ 2% stop risks ₹{sol['actual_risk_inr']:.1f} -> {sol['status']} (PASSED)")
+    print("  Position Sizer Check: PASSED. Approved trades are capped at 1.1R (₹55); flex band removed.")
     return True
 
 def test_cluster_risk_governor():
@@ -206,11 +213,19 @@ def test_execution_wrapper_and_killswitch():
         with open(kill_file, "w") as f:
             f.write("HALT")
         print("  Safety Check 3: Created local KILL_SWITCH file. Testing rejection...")
+        # QR-2026-1115 fix: keyword args (the positional form fed the TP into
+        # entry_type and failed BEFORE the kill-switch was ever checked), an
+        # executor bound to this exact file path, and a REASON assertion so a
+        # vacuous pass is impossible.
+        ex_ks = DeltaOrderExecutor(api_key="test_dummy_key", api_secret="test_dummy_secret",
+                                   live=False, kill_switch=kill_file)
         try:
-            ex.place_bracket_order("ETHUSD", "buy", 1, 1750.0, 1850.0)
+            ex_ks.place_bracket_order("ETHUSD", "buy", 1,
+                                      stop_price=1750.0, take_profit_price=1850.0)
             raise AssertionError("Order should have been rejected by KILL_SWITCH!")
         except ExecutorError as e:
-            print(f"  OK: Execution halted by kill-switch: {e}")
+            assert "KILL SWITCH" in str(e), f"halted for the WRONG reason: {e}"
+            print(f"  OK: Execution halted by kill-switch (reason verified): {e}")
     finally:
         if os.path.exists(kill_file):
             os.remove(kill_file)
