@@ -62,7 +62,7 @@ def save_active_positions(pos_dict):
     except Exception:
         pass
 
-def fetch_recent_candles(symbol, resolution="240", count=300):
+def fetch_recent_candles(symbol, resolution="240", count=800):
     now = int(time.time())
     start = now - (count * 4 * 3600 if resolution == "240" else count * 3600)
     url = f"{DELTA_API}/v2/chart/history?symbol={symbol}&resolution={resolution}&from={start}&to={now}"
@@ -90,7 +90,9 @@ def fetch_recent_candles(symbol, resolution="240", count=300):
 def scan_asset_setup(symbol, tf="4H", equity_inr=5000.0, risk_pct=0.01, leverage=10.0, products_dict=None):
     """Scans an asset for Tiered Fibonacci Rejections enforcing Single Entry and Lot Sizing."""
     res_code = "240" if tf == "4H" else "60"
-    df = fetch_recent_candles(symbol, resolution=res_code, count=300)
+    # QR-2026-1115 fix: 800 bars so EMA233 stabilises (300 bars leave a 7.6% seed
+    # weight = up to 3.3% EMA error on volatile names vs the backtest depth).
+    df = fetch_recent_candles(symbol, resolution=res_code, count=800)
     if df is None or len(df) < 250:
         return None
         
@@ -146,7 +148,7 @@ def scan_asset_setup(symbol, tf="4H", equity_inr=5000.0, risk_pct=0.01, leverage
             shelf = "EMA_233"
             
         if shelf and wick_ratio >= 0.25:
-            entry = df['close'].iloc[i] # Current market price
+            entry = df['close'].iloc[i] # Live market price; backtests fill at next-bar open - reconcile fills in the paper log (QR-2026-1115 note)
             stop = (min(curr_233, l) - 0.35 * curr_atr) if shelf == "EMA_233" else (l - 0.30 * curr_atr)
             risk_dist = entry - stop
             if risk_dist > 0:
@@ -177,6 +179,7 @@ def scan_asset_setup(symbol, tf="4H", equity_inr=5000.0, risk_pct=0.01, leverage
                     'risk_pct': sizing['actual_risk_pct'],
                     'sizing_status': sizing['status'],
                     'wick_pct': round(wick_ratio * 100.0, 1),
+                    'recent_pct_change': round((df['close'].iloc[prev] / df['close'].iloc[prev - 2] - 1.0) * 100.0, 2),
                     'entry_ts': int(df['timestamp'].iloc[prev])
                 }
                 
@@ -192,7 +195,7 @@ def scan_asset_setup(symbol, tf="4H", equity_inr=5000.0, risk_pct=0.01, leverage
             shelf = "EMA_233"
             
         if shelf and wick_ratio >= 0.25:
-            entry = df['close'].iloc[i]
+            entry = df['close'].iloc[i]  # live market price; see QR-2026-1115 fill-timing note
             stop = (max(curr_233, h) + 0.35 * curr_atr) if shelf == "EMA_233" else (h + 0.30 * curr_atr)
             risk_dist = stop - entry
             if risk_dist > 0:
@@ -223,6 +226,7 @@ def scan_asset_setup(symbol, tf="4H", equity_inr=5000.0, risk_pct=0.01, leverage
                     'risk_pct': sizing['actual_risk_pct'],
                     'sizing_status': sizing['status'],
                     'wick_pct': round(wick_ratio * 100.0, 1),
+                    'recent_pct_change': round((df['close'].iloc[prev] / df['close'].iloc[prev - 2] - 1.0) * 100.0, 2),
                     'entry_ts': int(df['timestamp'].iloc[prev])
                 }
                 
