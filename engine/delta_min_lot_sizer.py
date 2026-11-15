@@ -99,8 +99,10 @@ def calculate_delta_order_sizing(
     contract_risk_inr = contract_risk_usd * DELTA_FX_RATE
 
     # 4. Compute optimal integer contract lots
+    # Floor (never round ABOVE the risk budget); min-lot forces 1 contract and
+    # the risk cap below decides. QR-2026-1115 fix: round() could overshoot.
     ideal_lots = target_risk_inr / contract_risk_inr
-    contracts = max(1, int(round(ideal_lots)))
+    contracts = max(1, int(ideal_lots))
 
     # 5. Financial Metrics for calculated position
     actual_risk_inr = contracts * contract_risk_inr
@@ -117,13 +119,11 @@ def calculate_delta_order_sizing(
     if margin_required_inr > (equity_inr * max_capital_margin_pct):
         status = "REJECTED_MARGIN_EXCEEDED"
         reason = f"Required 10X margin (₹{margin_required_inr:.1f}) exceeds {max_capital_margin_pct*100}% of equity (₹{equity_inr*max_capital_margin_pct:.1f})"
-    elif actual_risk_inr > (target_risk_inr * 2.5):
-        # Even at 1 contract, risk exceeds 2.5% of account
+    elif actual_risk_inr > (target_risk_inr * 1.1):
+        # QR-2026-1115 fix: hard cap at 1.1R (Rs 55 on the Rs 50 budget).
+        # The former APPROVED_FLEX band (1.25x-2.5x target) is removed.
         status = "REJECTED_OVERSIZED"
-        reason = f"Minimum 1 contract risks ₹{actual_risk_inr:.1f} ({actual_risk_pct:.1f}%), exceeding 2.5% account limit"
-    elif actual_risk_inr > (target_risk_inr * 1.25):
-        status = "APPROVED_FLEX"
-        reason = f"Minimum 1 contract risks ₹{actual_risk_inr:.1f} ({actual_risk_pct:.1f}%). Allowed under blue-chip flex budget."
+        reason = f"Sized risk ₹{actual_risk_inr:.1f} ({actual_risk_pct:.1f}%) exceeds the 1.1R hard cap (₹{target_risk_inr * 1.1:.0f})"
 
     return {
         'symbol': symbol,
