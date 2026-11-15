@@ -45,6 +45,16 @@ def validate_new_trade_entry(
     Returns (is_approved: bool, reason: str).
     """
     candidate_sym = candidate_order['symbol']
+
+    # Crash-replay gate (restored per QR-2026-1115): no new entries while the
+    # venue prints a crash tape (Nov 5 / Oct 14 profile). The scanner fills
+    # these from the last two CLOSED 4H bars; absent keys leave the gate
+    # dormant so existing callers are unaffected.
+    _recent_pct = float(candidate_order.get('recent_pct_change', 0.0))
+    _anchor_pct = float(candidate_order.get('cluster_anchor_pct_change', 0.0))
+    if _recent_pct <= -6.0 or _anchor_pct <= -6.0:
+        return False, (f"Crash gate active: symbol {_recent_pct:+.1f}% / cluster anchor "
+                       f"{_anchor_pct:+.1f}% over the last two closed 4H bars - new entries suspended")
     
     # 1. Check if candidate is already actively open (Single Entry Invariant)
     if candidate_sym in active_positions:
