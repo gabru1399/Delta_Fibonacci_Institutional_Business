@@ -242,10 +242,14 @@ def main():
     products = fetch_delta_products()
     active_positions = load_active_positions()
     
+    turnover_map = {}
     try:
         from universe_screener import screen_deployable_universe
         df_deploy = screen_deployable_universe(min_24h_turnover_usd=100000.0)
         deployable_symbols = set(df_deploy['symbol'].tolist())
+        for _, r in df_deploy.iterrows():
+            t_inr = r['turnover_24h_usd'] * 85.0
+            turnover_map[r['symbol']] = f"₹{t_inr/1e7:.2f} Cr" if t_inr >= 1e7 else f"₹{t_inr/1e5:.1f} Lakh"
     except Exception:
         deployable_symbols = set(products.keys())
         
@@ -283,12 +287,13 @@ def main():
                         active_positions,
                         equity_inr=args.capital_inr
                     )
+                    setup['turnover_inr'] = turnover_map.get(setup['symbol'], "N/A")
                     setup['governor_ok'] = is_gov_ok
                     setup['governor_msg'] = gov_reason
                     found_setups.append(setup)
                     
                     status_flag = "[READY]" if (is_gov_ok and setup['sizing_status'] != 'REJECTED_OVERSIZED') else "[BLOCKED]"
-                    print(f"  {status_flag} {setup['symbol']} ({setup['tf']}): {setup['action']} @ {setup['entry']} | Lots: {setup['contracts']} (10X Margin: ₹{setup['margin_10x_inr']:.1f}, Risk: ₹{setup['risk_inr']:.1f})")
+                    print(f"  {status_flag} {setup['symbol']} ({setup['tf']}): {setup['action']} @ {setup['entry']} | Lots: {setup['contracts']} (10X Margin: ₹{setup['margin_10x_inr']:.1f}, Risk: ₹{setup['risk_inr']:.1f}, 24h Turn: {setup['turnover_inr']})")
             except Exception:
                 continue
                 
@@ -297,7 +302,7 @@ def main():
         print("No active Fibonacci rejection setups currently forming on the selected assets.")
     else:
         df_res = pd.DataFrame(found_setups)
-        display_cols = ['symbol', 'cluster', 'tf', 'action', 'shelf', 'entry', 'stop', 'contracts', '10x_margin_inr', 'risk_inr', 'risk_pct', 'sizing_status', 'governor_ok']
+        display_cols = ['symbol', 'cluster', 'tf', 'action', 'shelf', 'entry', 'stop', 'contracts', '10x_margin_inr', 'risk_inr', 'risk_pct', 'turnover_inr', 'sizing_status', 'governor_ok']
         df_res['10x_margin_inr'] = df_res['margin_10x_inr'].apply(lambda x: f"₹{x:.1f}")
         df_res['risk_inr'] = df_res['risk_inr'].apply(lambda x: f"₹{x:.1f}")
         df_res['risk_pct'] = df_res['risk_pct'].apply(lambda x: f"{x:.2f}%")

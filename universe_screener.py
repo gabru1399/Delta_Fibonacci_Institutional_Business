@@ -198,31 +198,37 @@ def main() -> None:
                   max_concurrent=args.max_concurrent)
     s = summarize(rows)
 
-    print("Delta India universe screener - QR-2026-1114-R1 (v2.0 basket audit)")
-    print(f"filters: 1-ct risk <= Rs {args.risk_cap:.0f} | margin <= Rs {args.margin_cap:,.0f} | "
-          f"24h turnover >= ${args.volume_floor:,.0f} | fee cost <= {args.friction_cap}R\n")
-    print(f"perpetuals scored:            {s['perpetuals_scored']:>4}")
-    print(f"T1  lot-feasible:             {s['t1_lot_eligible']:>4}   <- the letter's 242")
-    print(f"T2  + liquidity floor:        {s['t1_plus_liquidity']:>4}")
-    print(f"T3  + fee-friction cap:       {s['fully_eligible']:>4}   <- deployable universe")
-    print(f"fee tiers (T1):              {s['fee_tier_counts_t1']}")
-    print(f"fee tiers (T3):              {s['fee_tier_counts_full']}")
+    print("Delta India Universe Screener - QR-2026-1114-R1 (INR Denominated)")
+    vol_floor_inr = args.volume_floor * INR_PER_USD
+    vol_floor_str = f"₹{vol_floor_inr/1e7:.2f} Cr" if vol_floor_inr >= 1e7 else f"₹{vol_floor_inr/1e5:.1f} Lakh"
+    print(f"Filters: 1-Lot Risk <= ₹{args.risk_cap:.0f} | 10X Margin <= ₹{args.margin_cap:,.0f} | "
+          f"24h Turnover >= {vol_floor_str} | Fee Cost <= {args.friction_cap}R\n")
+    print(f"Perpetuals Scored:            {s['perpetuals_scored']:>4}")
+    print(f"T1  Lot-Feasible:             {s['t1_lot_eligible']:>4}")
+    print(f"T2  + Liquidity Floor:        {s['t1_plus_liquidity']:>4}   (>= {vol_floor_str})")
+    print(f"T3  + Fee-Friction Cap:       {s['fully_eligible']:>4}   <- Active Deployable Basket")
+    print(f"Fee Tiers (T1):               {s['fee_tier_counts_t1']}")
+    print(f"Fee Tiers (T3):               {s['fee_tier_counts_full']}")
 
     elig = sorted((r for r in rows if r.get("eligible")),
                   key=lambda r: -r["turnover_24h_usd"])
-    print(f"\nfully eligible basket ({len(elig)}), by 24h turnover:")
-    print(f"{'symbol':14} {'mark':>10} {'risk1ct':>8} {'fee R':>6} {'turnover $':>13}")
+    print(f"\nFully Eligible Active Basket ({len(elig)} Assets), by 24h Turnover:")
+    print(f"{'Symbol':14} {'1-Lot Notional':>15} {'10X Margin':>12} {'1-Lot Risk':>12} {'Fee Drag':>10} {'24h Turnover (INR)':>20}")
     for r in elig:
-        print(f"{r['symbol']:14} {r['mark_usd']:>10,.4g} {r['risk_1ct_inr']:>8.2f} "
-              f"{r['fee_rt_r']:>6.3f} {r['turnover_24h_usd']:>13,.0f}")
+        t_inr = r['turnover_24h_usd'] * INR_PER_USD
+        t_str = f"₹{t_inr/1e7:>8.2f} Cr" if t_inr >= 1e7 else f"₹{t_inr/1e5:>8.1f} Lakh"
+        print(f"{r['symbol']:14} ₹{r['min_lot_notional_inr']:>14,.0f} ₹{r['min_lot_margin_inr']:>11,.0f} ₹{r['risk_1ct_inr']:>11.2f} "
+              f"{r['fee_rt_r']:>9.3f}R {t_str:>20}")
 
     # spotlight on the audited headline seven
-    print("\naudited headline seven under the same filters:")
+    print("\nAudited Headline Seven under the same INR filters:")
     for sym in ["ARMBUSD", "MRVLBUSD", "HOODBUSD", "XAUTUSD", "PAXGUSD",
                 "BANKUSD", "GRAMUSD"]:
         r = next((x for x in rows if x["symbol"] == sym), None)
         if r:
-            print(f"  {sym:10} turnover ${r['turnover_24h_usd']:>12,.0f}  "
+            t_inr = r['turnover_24h_usd'] * INR_PER_USD
+            t_str = f"₹{t_inr/1e7:>7.2f} Cr" if t_inr >= 1e7 else f"₹{t_inr/1e5:>7.1f} Lakh"
+            print(f"  {sym:10} 24h Turnover {t_str:>12}  "
                   f"T1={r['t1_lot']} T2={r['t2_liquidity']} T3={r['t3_friction']} "
                   f"-> eligible={r['eligible']}")
 
