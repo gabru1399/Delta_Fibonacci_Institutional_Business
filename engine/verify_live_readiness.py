@@ -192,12 +192,17 @@ def test_execution_wrapper_and_killswitch():
     assert ex.live == False, "Default MUST be live=False (dry-run)!"
     print("  Safety Check 1: Live execution is FALSE by default (Dry-Run Mode Active).")
     
-    # Test bracket order compilation in dry-run
+    # Test bracket order compilation in dry-run. QR-2026-1115: pinned to a
+    # LIMIT order so the risk check runs on limit_price - a market order
+    # references the LIVE mark price, so the suite's outcome flipped with the
+    # tape (aborted at Rs 55.09 = 1.10R once ETH crossed ~$1,816).
     res = ex.place_bracket_order(
         symbol="ETHUSD",
         side="buy",
         contracts=1,
         stop_price=1750.0,
+        entry_type="limit",
+        limit_price=1800.0,
         take_profit_price=1850.0
     )
     assert res.get('dry_run') == True, "Execution wrapper must return dry_run=True!"
@@ -205,7 +210,26 @@ def test_execution_wrapper_and_killswitch():
     assert order.get('product_id') == 3136, "Product ID for ETHUSD mismatch!"
     assert order.get('size') == 1, "Order size must be integer 1 contract!"
     assert order.get('bracket_stop_loss_price') == "1750", "Bracket SL price string mismatch!"
-    print("  Safety Check 2: Dry-run bracket order compiled and signed correctly with mandatory TP/SL.")
+    assert order.get('limit_price') == "1800", "Limit price string mismatch!"
+    print("  Safety Check 2: Dry-run LIMIT bracket compiled and signed (risk pinned: Rs 42.50 = 0.85R).")
+
+    # QR-2026-1115: executor/sizer cap-alignment boundary pair on the same
+    # pinned price (ETHUSD cv 0.01, fx 85). Stop distance 62 -> Rs 52.70
+    # (1.05R, the sizer's own approved ETH row) must PASS; distance 70 ->
+    # Rs 59.50 (1.19R) must REJECT above the aligned 1.1R hard cap.
+    ok_min = ex.place_bracket_order(symbol="ETHUSD", side="buy", contracts=1,
+                                    stop_price=1738.0, entry_type="limit",
+                                    limit_price=1800.0, take_profit_price=1900.0)
+    assert ok_min.get('dry_run') == True, "Rs 52.70 (1.05R) min-lot order must pass the aligned 1.1R cap"
+    print("  Cap Alignment A: ETHUSD 1-ct @ Rs 52.70 risk (1.05R, sizer APPROVED) -> executor ACCEPTS")
+    try:
+        ex.place_bracket_order(symbol="ETHUSD", side="buy", contracts=1,
+                               stop_price=1730.0, entry_type="limit",
+                               limit_price=1800.0, take_profit_price=1900.0)
+        raise AssertionError("Rs 59.50 (1.19R) must be rejected by the 1.1R cap")
+    except ExecutorError as e:
+        assert "1.1R" in str(e), f"rejected for the WRONG reason: {e}"
+        print(f"  Cap Alignment B: ETHUSD 1-ct @ Rs 59.50 risk (1.19R) -> executor REJECTS: {e}")
     
     # Test Kill-Switch
     kill_file = os.path.join(BASE_DIR, "KILL_SWITCH")
@@ -220,8 +244,11 @@ def test_execution_wrapper_and_killswitch():
         ex_ks = DeltaOrderExecutor(api_key="test_dummy_key", api_secret="test_dummy_secret",
                                    live=False, kill_switch=kill_file)
         try:
+            # pinned limit form: passes the risk check deterministically so
+            # the halt can only come from the kill-switch itself
             ex_ks.place_bracket_order("ETHUSD", "buy", 1,
-                                      stop_price=1750.0, take_profit_price=1850.0)
+                                      stop_price=1750.0, entry_type="limit",
+                                      limit_price=1800.0, take_profit_price=1850.0)
             raise AssertionError("Order should have been rejected by KILL_SWITCH!")
         except ExecutorError as e:
             assert "KILL SWITCH" in str(e), f"halted for the WRONG reason: {e}"
