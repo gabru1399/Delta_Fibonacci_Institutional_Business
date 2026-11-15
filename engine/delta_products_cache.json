@@ -1,4 +1,148 @@
 {
+  "JASMYUSD": {
+    "id": 50123,
+    "symbol": "JASMYUSD",
+    "contract_value": 100.0,
+    "tick_size": 1e-06,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "COINXUSD": {
+    "id": 125551,
+    "symbol": "COINXUSD",
+    "contract_value": 0.01,
+    "tick_size": 0.01,
+    "initial_margin": 4.0,
+    "maintenance_margin": 2.0,
+    "quoting_asset": "USD"
+  },
+  "DELLBUSD": {
+    "id": 160635,
+    "symbol": "DELLBUSD",
+    "contract_value": 0.01,
+    "tick_size": 0.01,
+    "initial_margin": 4.0,
+    "maintenance_margin": 2.0,
+    "quoting_asset": "USD"
+  },
+  "XPLUSD": {
+    "id": 96874,
+    "symbol": "XPLUSD",
+    "contract_value": 10.0,
+    "tick_size": 0.0001,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "LDOUSD": {
+    "id": 19616,
+    "symbol": "LDOUSD",
+    "contract_value": 1.0,
+    "tick_size": 0.0001,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "TIAUSD": {
+    "id": 17330,
+    "symbol": "TIAUSD",
+    "contract_value": 1.0,
+    "tick_size": 0.0001,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "XLMUSD": {
+    "id": 47598,
+    "symbol": "XLMUSD",
+    "contract_value": 1.0,
+    "tick_size": 1e-05,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "AIXBTUSD": {
+    "id": 54906,
+    "symbol": "AIXBTUSD",
+    "contract_value": 10.0,
+    "tick_size": 1e-05,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "PROVEUSD": {
+    "id": 89751,
+    "symbol": "PROVEUSD",
+    "contract_value": 10.0,
+    "tick_size": 0.0001,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "REDUSD": {
+    "id": 67709,
+    "symbol": "REDUSD",
+    "contract_value": 10.0,
+    "tick_size": 0.0001,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "TNSRUSD": {
+    "id": 110377,
+    "symbol": "TNSRUSD",
+    "contract_value": 100.0,
+    "tick_size": 1e-05,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "COOKIEUSD": {
+    "id": 58203,
+    "symbol": "COOKIEUSD",
+    "contract_value": 10.0,
+    "tick_size": 1e-06,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "AIOTUSD": {
+    "id": 130965,
+    "symbol": "AIOTUSD",
+    "contract_value": 100.0,
+    "tick_size": 1e-05,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
+  "HOODBUSD": {
+    "id": 142750,
+    "symbol": "HOODBUSD",
+    "contract_value": 0.1,
+    "tick_size": 0.01,
+    "initial_margin": 4.0,
+    "maintenance_margin": 2.0,
+    "quoting_asset": "USD"
+  },
+  "SNDKBUSD": {
+    "id": 141835,
+    "symbol": "SNDKBUSD",
+    "contract_value": 0.01,
+    "tick_size": 0.01,
+    "initial_margin": 4.0,
+    "maintenance_margin": 2.0,
+    "quoting_asset": "USD"
+  },
+  "GRIFFAINUSD": {
+    "id": 57815,
+    "symbol": "GRIFFAINUSD",
+    "contract_value": 10.0,
+    "tick_size": 1e-06,
+    "initial_margin": 5.0,
+    "maintenance_margin": 2.5,
+    "quoting_asset": "USD"
+  },
   "LIGHTUSD": {
     "id": 115665,
     "symbol": "LIGHTUSD",
@@ -1394,15 +1538,6 @@
     "maintenance_margin": 2.5,
     "quoting_asset": "USD"
   },
-  "JASMYUSD": {
-    "id": 50123,
-    "symbol": "JASMYUSD",
-    "contract_value": 100.0,
-    "tick_size": 1e-06,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
   "OPUSD": {
     "id": 19618,
     "symbol": "OPUSD",
@@ -1412,15 +1547,6 @@
     "maintenance_margin": 2.5,
     "quoting_asset": "USD"
   },
-  "COINXUSD": {
-    "id": 125551,
-    "symbol": "COINXUSD",
-    "contract_value": 0.01,
-    "tick_size": 0.01,
-    "initial_margin": 4.0,
-    "maintenance_margin": 2.0,
-    "quoting_asset": "USD"
-  },
   "PNUTUSD": {
     "id": 45538,
     "symbol": "PNUTUSD",
@@ -1428,15 +1554,6 @@
     "tick_size": 1e-05,
     "initial_margin": 5.0,
     "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "DELLBUSD": {
-    "id": 160635,
-    "symbol": "DELLBUSD",
-    "contract_value": 0.01,
-    "tick_size": 0.01,
-    "initial_margin": 4.0,
-    "maintenance_margin": 2.0,
     "quoting_asset": "USD"
   },
   "PIEVERSEUSD": {
@@ -1475,56 +1592,11 @@
     "maintenance_margin": 2.5,
     "quoting_asset": "USD"
   },
-  "XPLUSD": {
-    "id": 96874,
-    "symbol": "XPLUSD",
-    "contract_value": 10.0,
-    "tick_size": 0.0001,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "LDOUSD": {
-    "id": 19616,
-    "symbol": "LDOUSD",
-    "contract_value": 1.0,
-    "tick_size": 0.0001,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "TIAUSD": {
-    "id": 17330,
-    "symbol": "TIAUSD",
-    "contract_value": 1.0,
-    "tick_size": 0.0001,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "XLMUSD": {
-    "id": 47598,
-    "symbol": "XLMUSD",
-    "contract_value": 1.0,
-    "tick_size": 1e-05,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
   "MELANIAUSD": {
     "id": 57812,
     "symbol": "MELANIAUSD",
     "contract_value": 1.0,
     "tick_size": 0.0001,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "AIXBTUSD": {
-    "id": 54906,
-    "symbol": "AIXBTUSD",
-    "contract_value": 10.0,
-    "tick_size": 1e-05,
     "initial_margin": 5.0,
     "maintenance_margin": 2.5,
     "quoting_asset": "USD"
@@ -1538,42 +1610,6 @@
     "maintenance_margin": 2.0,
     "quoting_asset": "USD"
   },
-  "PROVEUSD": {
-    "id": 89751,
-    "symbol": "PROVEUSD",
-    "contract_value": 10.0,
-    "tick_size": 0.0001,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "REDUSD": {
-    "id": 67709,
-    "symbol": "REDUSD",
-    "contract_value": 10.0,
-    "tick_size": 0.0001,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "TNSRUSD": {
-    "id": 110377,
-    "symbol": "TNSRUSD",
-    "contract_value": 100.0,
-    "tick_size": 1e-05,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "COOKIEUSD": {
-    "id": 58203,
-    "symbol": "COOKIEUSD",
-    "contract_value": 10.0,
-    "tick_size": 1e-06,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
   "BANKUSD": {
     "id": 143332,
     "symbol": "BANKUSD",
@@ -1583,47 +1619,11 @@
     "maintenance_margin": 2.5,
     "quoting_asset": "USD"
   },
-  "AIOTUSD": {
-    "id": 130965,
-    "symbol": "AIOTUSD",
-    "contract_value": 100.0,
-    "tick_size": 1e-05,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "HOODBUSD": {
-    "id": 142750,
-    "symbol": "HOODBUSD",
-    "contract_value": 0.1,
-    "tick_size": 0.01,
-    "initial_margin": 4.0,
-    "maintenance_margin": 2.0,
-    "quoting_asset": "USD"
-  },
-  "SNDKBUSD": {
-    "id": 141835,
-    "symbol": "SNDKBUSD",
-    "contract_value": 0.01,
-    "tick_size": 0.01,
-    "initial_margin": 4.0,
-    "maintenance_margin": 2.0,
-    "quoting_asset": "USD"
-  },
   "RAREUSD": {
     "id": 67710,
     "symbol": "RAREUSD",
     "contract_value": 100.0,
     "tick_size": 1e-05,
-    "initial_margin": 5.0,
-    "maintenance_margin": 2.5,
-    "quoting_asset": "USD"
-  },
-  "GRIFFAINUSD": {
-    "id": 57815,
-    "symbol": "GRIFFAINUSD",
-    "contract_value": 10.0,
-    "tick_size": 1e-06,
     "initial_margin": 5.0,
     "maintenance_margin": 2.5,
     "quoting_asset": "USD"

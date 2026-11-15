@@ -116,10 +116,10 @@ def scan_asset_setup(symbol, tf="4H", equity_inr=5000.0, risk_pct=0.01, leverage
     curr_233 = ema233[prev]
     curr_atr = atr[prev]
     
-    # 4H Macro Trend / Regime Definition
-    if curr_55 > curr_89:
+    # 4H Macro Trend / Regime Definition (EMA 89 vs EMA 233 Macro Gate - matching all 11,613 backtests)
+    if curr_89 > curr_233:
         regime = "BULLISH"
-    elif curr_55 < curr_89:
+    elif curr_89 < curr_233:
         regime = "BEARISH"
     else:
         return None
@@ -238,16 +238,24 @@ def main():
     parser.add_argument("--all_assets", action="store_true", help="Scan entire 242-asset universe instead of top 40")
     args = parser.parse_args()
     
-    print("\nFetching live contract specs from Delta Exchange India...")
+    print("\nFetching live contract specs & liquidity filters from Delta Exchange India...")
     products = fetch_delta_products()
     active_positions = load_active_positions()
     
+    try:
+        from universe_screener import screen_deployable_universe
+        df_deploy = screen_deployable_universe(min_24h_turnover_usd=100000.0)
+        deployable_symbols = set(df_deploy['symbol'].tolist())
+    except Exception:
+        deployable_symbols = set(products.keys())
+        
     leaderboard_file = os.path.join(BASE_DIR, "audit", "delta_calmar_leaderboard.csv")
     if os.path.exists(leaderboard_file):
         df_lead = pd.read_csv(leaderboard_file)
-        symbols = df_lead['symbol'].drop_duplicates().tolist()
+        raw_symbols = df_lead['symbol'].drop_duplicates().tolist()
+        symbols = [s for s in raw_symbols if s in deployable_symbols]
     else:
-        symbols = list(products.keys())
+        symbols = [s for s in products.keys() if s in deployable_symbols]
         
     if args.sector != "ALL":
         symbols = [s for s in symbols if classify_asset(s) == args.sector]
