@@ -19,7 +19,7 @@ from asset_universe_classifier import classify_asset
 
 # Correlated Sub-clusters that must never be traded simultaneously
 CORRELATED_CLUSTERS = {
-    "SEMICONDUCTORS": ["ARMBUSD", "MRVLBUSD", "AMDBUSD", "NVDBUSD", "SOXLBUSD"],
+    "SEMICONDUCTORS": ["ARMBUSD", "MRVLBUSD", "AMDBUSD", "NVDBUSD", "SOXLBUSD", "INTCBUSD", "SNDKBUSD", "MUBUSD", "DRAMBUSD"],
     "PRECIOUS_METALS": ["XAUTUSD", "PAXGUSD", "SLVONUSD"],
     "CRYPTO_MAJORS": ["BTCUSD", "ETHUSD", "SOLUSD", "BNBUSD"],
     "MEME_COINS": ["DOGEUSD", "PEPEUSD", "SHIBUSD", "BONKUSD", "FLOKIUSD"]
